@@ -18,11 +18,11 @@ typedef struct s_range
 {
 	size_t	end;
 	size_t	start;
-} t_range ;
+}	t_range ;
 
-void    *while_loop(void *arg)
+void	*while_loop(void *arg)
 {
-	volatile	t_range			*rng;
+	t_range			*rng;
 	volatile size_t	i;
 
 	rng = (t_range *)arg;
@@ -32,20 +32,20 @@ void    *while_loop(void *arg)
 	return (0);
 }
 
-int main(int ac, char *av[])
+int	main(int ac, char *av[])
 {
 	pthread_t	*threads;
 	t_range		*rg;
+	size_t		i;
 
+	(void)av;
 	rg = malloc(sizeof(t_range) * ac);
-	threads = (pthread_t*)malloc(sizeof(pthread_t) * (size_t)ac);
+	threads = (pthread_t *)malloc(sizeof(pthread_t) * (size_t)ac);
 	if (!threads || !rg)
-		return (write(2, "error", 5), 0);
-
-	size_t  i = ULONG_MAX;
+		return ((size_t){0} = write(2, "error", 5), 0);
+	i = ULONG_MAX;
 	rg->end = 0;
-
-	while (++i < ac && rg->end <= 1000000000UL)
+	while (++i < (size_t)ac && rg->end <= 1000000000UL)
 	{
 		rg[i].start = i * (1000000000UL / ac);
 		rg[i].end = (i + 1) * (1000000000UL / ac);
