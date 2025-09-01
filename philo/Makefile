@@ -60,6 +60,8 @@ SRC :=
 
 vpath %.c $(SRC_DIR)
 SRC += main.c
+SRC += create_philos.c
+SRC += cleanup1.c
 
 vpath %.c $(PRINT_DIR)
 # SRC += print1.c

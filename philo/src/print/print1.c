@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/01 17:47:15 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/01 20:01:36 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // t = thinking
 // d = died
 
-int	writing(size_t time, char type, size_t philo_num)
+static int	writing(size_t time, char type, size_t philo_num)
 {
 	static const char	*msgs[] = {
 		"has taken the fork",
