@@ -6,14 +6,11 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/01 20:01:36 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/02 10:29:51 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
-#include <stddef.h>
-#include <unistd.h>
 
 // f = fork
 // e = eating
@@ -21,17 +18,14 @@
 // t = thinking
 // d = died
 
-static int	writing(size_t time, char type, size_t philo_num)
+static int	writing(t_vars *vars, char type, size_t philo_num)
 {
-	static const char	*msgs[] = {
-		"has taken the fork",
-		"is eating",
-		"is sleeping",
-		"is thinking",
-		"died"};
+	static const char	*msgs[] = {"has taken the fork", "is eating",
+		"is sleeping", "is thinking", "died"};
 	const char			*msg;
-	int					status;
+	struct timeval		tv;
 
+	gettimeofday(&tv, NULL);
 	if (type == 'f')
 		msg = msgs[0];
 	else if (type == 'e')
@@ -42,17 +36,23 @@ static int	writing(size_t time, char type, size_t philo_num)
 		msg = msgs[3];
 	else if (type == 'd')
 		msg = msgs[4];
-	status = write(1, &time, sizeof(time));
-	status = write(1, " ", 1);
-	status = write(1, &philo_num, sizeof(philo_num));
-	status = write(1, " ", 1);
-	status = write(1, msg, sizeof(msg));
-	return (status);
+	else
+		return (msg = "err: msg\n", vars->err = write(2, msg, 9), vars->err);
+	vars->err = write(1, &tv.tv_sec, sizeof(tv.tv_sec));
+	vars->err = write(1, " ", 1);
+	vars->err = write(1, &philo_num, sizeof(philo_num));
+	vars->err = write(1, " ", 1);
+	vars->err = write(1, msg, sizeof(msg));
+	return (vars->err = write(1, "\n", 1), vars->err);
 }
 
-void	print_args(size_t time, char type, size_t philo_num)
+void	print_args(t_vars *vars, char type, size_t philo_num)
 {
+	static pthread_mutex_t	writing_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+	pthread_mutex_lock(&writing_mutex);
 	if ((type == 'f' || type == 'e' || type == 's'
-			|| type == 't' || type == 'd') && !writing(time, type, philo_num))
-		(size_t){0} = write(2, "error in print_args\n", 21);
+			|| type == 't' || type == 'd') && !writing(vars, type, philo_num))
+		(size_t){0} = write(2, "err in print_args\n", 18);
+	pthread_mutex_unlock(&writing_mutex);
 }

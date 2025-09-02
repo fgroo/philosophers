@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup1.c                                         :+:      :+:    :+:   */
+/*   thinking1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/01 21:45:55 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 10:36:16 by fgroo            ###   ########.fr       */
+/*   Created: 2025/09/02 06:34:46 by fgroo             #+#    #+#             */
+/*   Updated: 2025/09/02 10:31:01 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	cleanup(t_vars *vars)
+void	thinking(t_vars *vars, size_t philo_num)
 {
-	size_t	i;
+	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-	if (vars->forks)
-	{
-		i = 0;
-		while (i < vars->philo_num)
-			pthread_mutex_destroy(vars->forks + i++);
-		free(vars->forks);
-	}
-	if (vars->philos)
-		free(vars->philos);
+	pthread_mutex_lock(&print_mutex);
+	print_args(vars, 't', philo_num);
+	pthread_mutex_unlock(&print_mutex);
 }

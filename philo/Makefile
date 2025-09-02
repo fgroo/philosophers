@@ -1,4 +1,3 @@
-
 NAME := philo
 
 ### DIR ###
@@ -24,24 +23,24 @@ LDFLAGS += -pthread
 ifeq ($(GDB), 1)
 	CFLAGS += -g
 	CFLAGS += -fno-omit-frame-pointer
-	CFLAGS -= -O2
+	CFLAGS := $(filter-out -O2,$(CFLAGS))
 endif
 
 ifeq ($(TSAN), 1)
-	CFLAGS	+= -fsanitize=thread
-	LDFLAGS	+= -fsanitize=thread
+	CFLAGS += -fsanitize=thread
+	LDFLAGS += -fsanitize=thread
 endif
 
 ifeq ($(LSAN), 1)
-	CFLAGS	+= -fsanitize=leak
-	LDFLAGS	+= -fsanitize=leak
+	CFLAGS += -fsanitize=leak
+	LDFLAGS += -fsanitize=leak
 endif
 
 ifeq ($(ASAN), 1)
-	CFLAGS	+= -fsanitize=address
-	LDFLAGS	+= -fsanitize=address
+	CFLAGS += -fsanitize=address
+	LDFLAGS += -fsanitize=address
 endif
- 
+
 
 ### .o ###
 
@@ -62,9 +61,14 @@ vpath %.c $(SRC_DIR)
 SRC += main.c
 SRC += create_philos.c
 SRC += cleanup1.c
+SRC += eating1.c
+SRC += sleeping1.c
+SRC += thinking1.c
+SRC += exiting1.c
+SRC += hub1.c
 
 vpath %.c $(PRINT_DIR)
-# SRC += print1.c
+SRC += print1.c
 
 
 all: $(NAME)

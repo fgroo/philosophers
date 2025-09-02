@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup1.c                                         :+:      :+:    :+:   */
+/*   sleeping1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/01 21:45:55 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 10:36:16 by fgroo            ###   ########.fr       */
+/*   Created: 2025/09/02 07:14:55 by fgroo             #+#    #+#             */
+/*   Updated: 2025/09/02 10:38:05 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stddef.h>
 
-void	cleanup(t_vars *vars)
+void	sleeping(t_vars *vars, size_t philo_num)
 {
-	size_t	i;
+	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-	if (vars->forks)
-	{
-		i = 0;
-		while (i < vars->philo_num)
-			pthread_mutex_destroy(vars->forks + i++);
-		free(vars->forks);
-	}
-	if (vars->philos)
-		free(vars->philos);
+	pthread_mutex_lock(&print_mutex);
+	print_args(vars, 's', philo_num);
+	usleep(vars->time_to_sleep * 1000);
+	pthread_mutex_unlock(&print_mutex);
 }
