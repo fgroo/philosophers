@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 10:33:00 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/02 22:41:58 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 static int	inner_hub(t_vars *vars, size_t philo_num)
 {
-	pthread_mutex_lock(&vars->forks[philo_num - 1]);
-	pthread_mutex_lock(&vars->forks[(philo_num + 1) % philo_num]);
+	const size_t	left = philo_num - 1;
+	const size_t	right = (vars->philo_num == 1) ? 1 : (philo_num % vars->philo_num);
+
+	if (g_sigint)
+		return (1);
+	pthread_mutex_lock(&vars->forks[left]);
+	pthread_mutex_lock(&vars->forks[right]);
 	eating(vars, philo_num);
 	sleeping(vars, philo_num);
 	thinking(vars, philo_num);
@@ -28,17 +33,16 @@ int	hub_of_philos(t_vars *vars)
 	size_t	j;
 
 	i = 0;
-	while (!vars->err && (vars->turns == 0 || i < vars->turns))
+	while (!vars->err && !g_sigint && (vars->turns == 0 || i < vars->turns))
 	{
-		j = 0;
-		while (j < vars->philo_num)
+		j = 1;
+		while (!g_sigint && j <= vars->philo_num)
 		{
-			if (inner_hub(vars, vars->philo_num))
+			if (inner_hub(vars, j))
 				return (1);
 			++j;
 		}
 		++i;
 	}
-	(void)vars;
 	return (0);
 }

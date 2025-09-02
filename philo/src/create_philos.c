@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 19:59:52 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 10:32:02 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/02 22:35:47 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	create_philos(t_vars *vars)
 	philos = malloc(sizeof(pthread_t) * (vars->philo_num + 1));
 	if (!philos)
 		return (vars->err = 1, 1);
-	(void)vars;
+	vars->philos = philos;
 	return (0);
 }
 

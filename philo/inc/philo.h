@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 10:39:20 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/02 22:45:23 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <signal.h>
 
 typedef struct s_vars
 {
@@ -32,6 +33,7 @@ typedef struct s_vars
 	pthread_t		*philos;
 	pthread_mutex_t	*forks;
 	size_t			turns;
+	struct timeval	start_time;
 }	t_vars;
 
 void	cleanup(t_vars *vars);
@@ -41,5 +43,12 @@ void	print_args(t_vars *vars, char type, size_t philo_num);
 void	eating(t_vars *vars, size_t philo_num);
 void	sleeping(t_vars *vars, size_t philo_num);
 void	thinking(t_vars *vars, size_t philo_num);
+void	exiting(t_vars *vars, size_t philo_num);
+
+/* Simple SIGINT handler (Ctrl+C) */
+void	siginit_handler(int signo);
+
+/* Global stop flag set by SIGINT handler */
+extern volatile sig_atomic_t	g_sigint;
 
 #endif

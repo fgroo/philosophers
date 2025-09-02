@@ -6,12 +6,23 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 10:35:35 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/02 22:43:13 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <signal.h>
 #include <stddef.h>
+#include <sys/time.h>
+
+/* SIGINT flag toggled by handler */
+volatile sig_atomic_t	g_sigint = 0;
+
+void	siginit_handler(int signo)
+{
+	(void)signo;
+	g_sigint = 1;
+}
 
 long	ft_atol(const char *str)
 {
@@ -79,11 +90,18 @@ int	main(int ac, char *av[])
 		uturns_flag = 0;
 	else
 		uturns_flag = 1;
+	if (signal(SIGINT, siginit_handler) == SIG_ERR)
+		return (1);
 	if (!prep_convert_num(av, uturns_flag, &vars))
 		return (1);
+	vars.err = 0;
+	vars.philos = NULL;
+	vars.forks = NULL;
 	if (creating(&vars))
 		return (1);
-	if (hub_of_philos(&vars))
+	if (gettimeofday(&vars.start_time, NULL) == 0 && hub_of_philos(&vars))
 		return (1);
+	if (g_sigint)
+		cleanup(&vars);
 	return (0);
 }
