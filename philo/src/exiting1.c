@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 07:30:41 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 22:24:35 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/03 21:20:53 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 void	exiting(t_vars *vars, size_t philo_num)
 {
 	print_args(vars, 'd', philo_num);
-	cleanup(vars);
+	cleanup(vars, 0);
 	vars->err = 1;
 }

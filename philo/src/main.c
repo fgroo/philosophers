@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 22:43:13 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/03 21:20:31 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,11 @@ int	main(int ac, char *av[])
 	if (!prep_convert_num(av, uturns_flag, &vars))
 		return (1);
 	vars.err = 0;
-	vars.philos = NULL;
-	vars.forks = NULL;
 	if (creating(&vars))
 		return (1);
-	if (gettimeofday(&vars.start_time, NULL) == 0 && hub_of_philos(&vars))
+	if (gettimeofday(&vars.start_time, NULL) == 0 && pre_hub(&vars))
 		return (1);
 	if (g_sigint)
-		cleanup(&vars);
+		cleanup(&vars, 0);
 	return (0);
 }

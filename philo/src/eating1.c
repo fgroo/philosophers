@@ -6,11 +6,12 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:17:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 22:44:53 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/03 21:30:46 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
 
 void	eating(t_vars *vars, size_t philo_num)
 {
@@ -21,7 +22,22 @@ void	eating(t_vars *vars, size_t philo_num)
 	pthread_mutex_lock(&print_mutex);
 	print_args(vars, 'e', philo_num);
 	usleep(vars->time_to_eat * 1000);
-	pthread_mutex_unlock(&print_mutex);	
-	pthread_mutex_unlock(&vars->forks[left]);
-	pthread_mutex_unlock(&vars->forks[right]);
+	pthread_mutex_unlock(&print_mutex);
+	pthread_mutex_lock(&vars->eaten_mutex);
+	++vars->eaten_count;
+	pthread_mutex_unlock(&vars->eaten_mutex);
+	if (philo_num % 2 == 1)
+	{
+		if (pthread_mutex_unlock(&vars->forks[right]) != 0)
+			vars->err = 1; /* Handle lock error, e.g., set err flag */
+		if (pthread_mutex_unlock(&vars->forks[left]) != 0)
+			vars->err = 1;
+	}
+	else
+	{
+		if (pthread_mutex_unlock(&vars->forks[left]) != 0)
+			vars->err = 1;
+		if (pthread_mutex_unlock(&vars->forks[right]) != 0)
+			vars->err = 1;
+	}
 }

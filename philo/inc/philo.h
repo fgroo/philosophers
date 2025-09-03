@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 22:45:23 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/03 21:11:38 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,19 @@ typedef struct s_vars
 	pthread_mutex_t	*forks;
 	size_t			turns;
 	struct timeval	start_time;
+	pthread_mutex_t	eaten_mutex;
+	size_t			eaten_count;
 }	t_vars;
 
-void	cleanup(t_vars *vars);
+typedef struct s_bypass
+{
+	t_vars	*vars;
+	size_t	philo_num;
+}	t_bypass;
+
+void	cleanup(t_vars *vars, size_t optional);
 int		creating(t_vars *vars);
-int		hub_of_philos(t_vars *vars);
+int		pre_hub(t_vars *vars);
 void	print_args(t_vars *vars, char type, size_t philo_num);
 void	eating(t_vars *vars, size_t philo_num);
 void	sleeping(t_vars *vars, size_t philo_num);
