@@ -13,8 +13,8 @@ CFLAGS += -Wextra
 CFLAGS += -Werror
 CFLAGS += -Wpedantic
 CFLAGS += -pthread
-CFLAGS += -D_FORTIFY_SOURCE=2
 CFLAGS += -O2
+CFLAGS += -D_FORTIFY_SOURCE=2
 CFLAGS += -I$(INC_DIR)
 
 LDFLAGS :=
@@ -23,7 +23,7 @@ LDFLAGS += -pthread
 ifeq ($(GDB), 1)
 	CFLAGS += -g
 	CFLAGS += -fno-omit-frame-pointer
-	CFLAGS := $(filter-out -O2,$(CFLAGS))
+	CFLAGS := $(filter-out -O2 -D_FORTIFY_SOURCE=2,$(CFLAGS))
 endif
 
 ifeq ($(TSAN), 1)
