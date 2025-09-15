@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/03 21:20:31 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/13 17:47:27 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int ac, char *av[])
 	vars.err = 0;
 	if (creating(&vars))
 		return (1);
-	if (gettimeofday(&vars.start_time, NULL) == 0 && pre_hub(&vars))
+	if (pre_hub(&vars))
 		return (1);
 	if (g_sigint)
 		cleanup(&vars, 0);

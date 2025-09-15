@@ -6,13 +6,14 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/11 20:19:41 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/15 16:48:50 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
 #include <stddef.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 static void	*inner_hub(t_vars *vars, size_t philo_num)
@@ -25,7 +26,7 @@ static void	*inner_hub(t_vars *vars, size_t philo_num)
 		pthread_mutex_lock(&vars->forks[left]);
 		print_args(vars, 'f', philo_num); // (size_t){0} = write(1, "L\n", 3);
 		pthread_mutex_lock(&vars->forks[right]);
-		print_args(vars, 'f', philo_num); // , (size_t){0} = write(1, "R\n", 3);
+		print_args(vars, 'f', philo_num); // (size_t){0} = write(1, "R\n", 3);
 		eating(vars, philo_num);
 		sleeping(vars, philo_num);
 		thinking(vars, philo_num);
@@ -39,7 +40,8 @@ void	*portal(void *bypass)
 	t_bypass	*pass;
 
 	pass = (t_bypass *)bypass;
-
+	gettimeofday(&pass->vars->start_time[pass->philo_num], NULL);
+	pass->vars->elapsed_time[pass->philo_num] = pass->vars->start_time->tv_usec;
 	if (inner_hub(pass->vars, pass->philo_num))
 		return ((void *)1);
 	return (0);

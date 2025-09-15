@@ -66,6 +66,7 @@ SRC += sleeping1.c
 SRC += thinking1.c
 SRC += exiting1.c
 SRC += hub1.c
+SRC += dying1.c
 
 vpath %.c $(PRINT_DIR)
 SRC += print1.c

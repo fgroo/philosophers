@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 19:59:52 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/03 21:31:41 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/09/13 18:26:55 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,18 @@ static int	create_forks(t_vars *vars)
 
 static int	create_others(t_vars *vars)
 {
-	pthread_mutex_init(&vars->eaten_mutex, NULL);
+	size_t	i;
+
+	vars->eaten_mutex = malloc(sizeof(pthread_mutex_t) * vars->philo_num);
+	vars->eaten_count = malloc(sizeof(size_t) * vars->philo_num);
+	vars->start_time = malloc(sizeof(size_t) * vars->philo_num);
+	vars->elapsed_time = malloc(sizeof(size_t) * vars->philo_num);
+	if (!vars->eaten_count || !vars->eaten_mutex
+		|| !vars->start_time || !vars->elapsed_time)
+		return (cleanup(vars, 0), vars->err = 1, 1);
+	i = 0;
+	while (i < vars->philo_num)
+		pthread_mutex_init(&vars->eaten_mutex[i++], NULL);
 	return (0);
 }
 
