@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 19:59:52 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/13 18:26:55 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/01 22:15:59 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,16 @@ static int	create_others(t_vars *vars)
 {
 	size_t	i;
 
-	vars->eaten_mutex = malloc(sizeof(pthread_mutex_t) * vars->philo_num);
-	vars->eaten_count = malloc(sizeof(size_t) * vars->philo_num);
-	vars->start_time = malloc(sizeof(size_t) * vars->philo_num);
-	vars->elapsed_time = malloc(sizeof(size_t) * vars->philo_num);
-	if (!vars->eaten_count || !vars->eaten_mutex
-		|| !vars->start_time || !vars->elapsed_time)
+	vars->eaten_mutex = malloc(sizeof(pthread_mutex_t) * (vars->philo_num + 1));
+	vars->eaten_count = malloc(sizeof(size_t) * (vars->philo_num + 1));
+	vars->cur_sec = malloc(sizeof(size_t) * (vars->philo_num + 1));
+	vars->cur_usec = malloc(sizeof(size_t) * (vars->philo_num + 1));
+	vars->timestamp = malloc(sizeof(size_t) * (vars->philo_num + 1));
+	if (!vars->eaten_count || !vars->eaten_mutex || !vars->cur_sec
+		|| !vars->cur_usec || !vars->timestamp)
 		return (cleanup(vars, 0), vars->err = 1, 1);
-	i = 0;
-	while (i < vars->philo_num)
+	i = 1;
+	while (i <= vars->philo_num + 1)
 		pthread_mutex_init(&vars->eaten_mutex[i++], NULL);
 	return (0);
 }
@@ -73,6 +74,7 @@ int	creating(t_vars *vars)
 		return (1);
 	if (create_forks(vars))
 		return (1);
-	create_others(vars);
+	if (create_others(vars))
+		return (1);
 	return (0);
 }

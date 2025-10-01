@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/02 22:03:49 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/01 22:49:21 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ static int	writing(t_vars *vars, char type, size_t philo_num)
 	char				*msg;
 	struct timeval		tv;
 	const size_t		millisecs = (gettimeofday(&tv, NULL) * 0)
-		+ ((tv.tv_sec - vars->start_time.tv_sec) * 1000);
+		+ conv_time(tv.tv_sec, tv.tv_usec, vars->start_sec, vars->start_usec);
 
-	msg = lotoa(millisecs);
-	vars->err = write(1, msg, ft_strlen(msg));
-	(free(msg), msg = NULL, vars->err = write(1, " ", 1));
+	msg = lotoa(millisecs / 1000);
+	(size_t){0} = write(1, msg, ft_strlen(msg));
+	(free(msg), msg = NULL, (size_t){0} = write(1, " ", 1));
 	msg = lotoa(philo_num);
-	vars->err = write(1, msg, ft_strlen(msg));
-	(free(msg), msg = NULL, vars->err = write(1, " ", 1));
+	(size_t){0} = write(1, msg, ft_strlen(msg));
+	(free(msg), msg = NULL, (size_t){0} = write(1, " ", 1));
 	if (type == 'f')
 		msg = (char *)msgs[0];
 	else if (type == 'e')
@@ -80,8 +80,8 @@ static int	writing(t_vars *vars, char type, size_t philo_num)
 		msg = (char *)msgs[3];
 	else if (type == 'd')
 		msg = (char *)msgs[4];
-	vars->err = write(1, msg, ft_strlen(msg));
-	return (vars->err = write(1, "\n", 1), vars->err = 0, 0);
+	(size_t){0} = write(1, msg, ft_strlen(msg));
+	return ((size_t){0} = write(1, "\n", 1), 0);
 }
 
 void	print_args(t_vars *vars, char type, size_t philo_num)

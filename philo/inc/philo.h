@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/13 19:09:04 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/01 21:20:56 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ typedef struct s_vars
 	pthread_t		*philos;
 	pthread_mutex_t	*forks;
 	size_t			turns;
-	struct timeval	*start_time;
-	size_t			*elapsed_time;
+	struct timeval	tv;
+	size_t			start_sec;
+	size_t			start_usec;
+	size_t			*cur_sec;
+	size_t			*cur_usec;
+	size_t			*timestamp;
 	pthread_mutex_t	*eaten_mutex;
 	size_t			*eaten_count;
 }	t_vars;
@@ -54,6 +58,8 @@ void	sleeping(t_vars *vars, size_t philo_num);
 void	thinking(t_vars *vars, size_t philo_num);
 void	dying(t_vars *vars, size_t philo_num);
 void	exiting(t_vars *vars, size_t philo_num);
+int		calc_time(t_vars *vars, size_t philo_num);
+size_t	conv_time(long sec, long usec, size_t s_sec, size_t s_usec);
 
 /* Simple SIGINT handler (Ctrl+C) */
 void	siginit_handler(int signo);
