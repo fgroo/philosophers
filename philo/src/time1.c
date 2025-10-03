@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 18:26:01 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/02 23:37:34 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 16:21:09 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ size_t	conv_time(long sec, long usec, size_t s_sec, size_t s_usec)
 	new = (size_t)sec * 1000000L + usec;
 	return (new);
 }
-

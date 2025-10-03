@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 19:59:52 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/02 23:31:14 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 16:21:23 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	create_others(t_vars *vars)
 		++i;
 	}
 	if (!vars->eaten_count || !vars->cur_sec
-			|| !vars->cur_usec || !vars->timestamp)
+		|| !vars->cur_usec || !vars->timestamp)
 		return (cleanup(vars, 0), 1);
 	return (0);
 }

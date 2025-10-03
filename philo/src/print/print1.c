@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/01 22:49:21 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 17:11:42 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	*lotoa(size_t n)
 static int	writing(t_vars *vars, char type, size_t philo_num)
 {
 	static const char	*msgs[] = {"has taken the fork", "is eating",
-		"is sleeping", "is thinking", "died"};
+		"is sleeping", "is thinking", "died", "wait for left fork--------", "wait for right fork--------"};
 	char				*msg;
 	struct timeval		tv;
 	const size_t		millisecs = (gettimeofday(&tv, NULL) * 0)
@@ -80,6 +80,10 @@ static int	writing(t_vars *vars, char type, size_t philo_num)
 		msg = (char *)msgs[3];
 	else if (type == 'd')
 		msg = (char *)msgs[4];
+	else if (type == 'l')
+		msg = (char *)msgs[5];
+	else if (type == 'r')
+		msg = (char *)msgs[6];
 	(size_t){0} = write(1, msg, ft_strlen(msg));
 	return ((size_t){0} = write(1, "\n", 1), 0);
 }
@@ -90,7 +94,7 @@ void	print_args(t_vars *vars, char type, size_t philo_num)
 
 	pthread_mutex_lock(&writing_mutex);
 	if ((type == 'f' || type == 'e' || type == 's'
-			|| type == 't' || type == 'd'))
+			|| type == 't' || type == 'd' || type == 'l' || type == 'r'))
 		writing(vars, type, philo_num);
 	pthread_mutex_unlock(&writing_mutex);
 }

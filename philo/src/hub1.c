@@ -6,11 +6,12 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/03 02:20:43 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 18:36:34 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <limits.h>
 #include <pthread.h>
 #include <stddef.h>
 #include <sys/time.h>
@@ -24,17 +25,17 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 	while (!vars->err && (vars->turns == 0
 			|| vars->eaten_count[philo_num] < vars->turns))
 	{
+		// print_args(vars, 'l', philo_num);
 		pthread_mutex_lock(&vars->forks[left]);
-		if (vars->err)
-			break ;
-		print_args(vars, 'f', philo_num);
-		if (vars->err)
-			break ;
+		if (!vars->err)
+			print_args(vars, 'f', philo_num);
+		// print_args(vars, 'r', philo_num);
 		pthread_mutex_lock(&vars->forks[right]);
-		if (vars->err)
-			break ;
-		print_args(vars, 'f', philo_num);
+		if (!vars->err)
+			print_args(vars, 'f', philo_num);
 		if (eating(vars, philo_num))
+			break ;
+		if (vars->eaten_count[philo_num] == vars->turns)
 			break ;
 		if (sleeping(vars, philo_num))
 			break ;
@@ -46,7 +47,7 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 void	*portal(void *bypass)
 {
 	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
-	t_bypass	*pass;
+	t_bypass				*pass;
 
 	pthread_mutex_lock(&mutex);
 	pass = (t_bypass *)bypass;
@@ -78,9 +79,10 @@ void	*monitoring(void *vars)
 		i = 1;
 		while (i <= var->philo_num)
 		{
-			cur_time = (gettimeofday(&tv, NULL) * 0)
-		+ conv_time(tv.tv_sec, tv.tv_usec, var->start_sec, var->start_usec);
-			if (var->timestamp[i] && cur_time - var->timestamp[i] > var->time_to_die * 1000)
+			cur_time = (gettimeofday(&tv, NULL) * 0) + conv_time(tv.tv_sec,
+					tv.tv_usec, var->start_sec, var->start_usec);
+			if (var->timestamp[i] && cur_time - var->timestamp[i]
+				> var->time_to_die * 1000)
 				return (dying(var, i), var->finished = 1, (void *)0);
 			++i;
 		}
@@ -104,12 +106,15 @@ int	pre_hub(t_vars *vars)
 		if (pthread_create(&vars->philos[i], NULL,
 				portal, &(t_bypass){vars, i}))
 			return (cleanup(vars, i), 1);
-		usleep(42);
+		usleep(1000);
 		++i;
 	}
 	while (j <= vars->philo_num)
 		pthread_join(vars->philos[j++], NULL);
 	vars->finished = 1;
 	pthread_join(monitor, NULL);
+	// i = 0;
+	// while (++i <= vars->philo_num)
+	// 	printf("philo nb:%ld finished %ld rounds\n", i, vars->eaten_count[i]);
 	return (vars->err);
 }
