@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/02 23:44:10 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 23:51:36 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,14 @@ int	main(int ac, char *av[])
 	else
 		uturns_flag = 1;
 	vars.err = 0;
+	vars.start_sec = 0;
+	vars.start_usec = 0;
 	if (!prep_convert_num(av, uturns_flag, &vars))
 		return (1);
 	if (creating(&vars))
-		return (1);
+		return (cleanup(&vars, 0), 1);
 	if (pre_hub(&vars))
-		return (1);
+		return (cleanup(&vars, 0), 1);
+	cleanup(&vars, 0);
 	return (0);
 }

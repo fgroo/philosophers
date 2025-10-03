@@ -13,7 +13,7 @@ CFLAGS += -Wextra
 CFLAGS += -Werror
 CFLAGS += -Wpedantic
 CFLAGS += -pthread
-CFLAGS += -O2
+CFLAGS += -O3
 CFLAGS += -D_FORTIFY_SOURCE=2
 CFLAGS += -I$(INC_DIR)
 
@@ -59,12 +59,11 @@ SRC :=
 
 vpath %.c $(SRC_DIR)
 SRC += main.c
-SRC += create_philos.c
+SRC += creating1.c
 SRC += cleanup1.c
 SRC += eating1.c
 SRC += sleeping1.c
 SRC += thinking1.c
-SRC += exiting1.c
 SRC += hub1.c
 SRC += dying1.c
 SRC += time1.c

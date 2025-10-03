@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/03 01:39:54 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 23:12:04 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int		eating(t_vars *vars, size_t philo_num);
 int		sleeping(t_vars *vars, size_t philo_num);
 int		thinking(t_vars *vars, size_t philo_num);
 void	dying(t_vars *vars, size_t philo_num);
-void	exiting(t_vars *vars, size_t philo_num);
 int		calc_time(t_vars *vars, size_t philo_num);
 size_t	conv_time(long sec, long usec, size_t s_sec, size_t s_usec);
 

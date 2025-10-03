@@ -6,12 +6,24 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 21:45:55 by fgroo             #+#    #+#             */
-/*   Updated: 2025/09/03 21:30:29 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 23:16:14 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stddef.h>
+
+static void	cleanup_two(t_vars *vars)
+{
+	if (vars->cur_sec)
+		free(vars->cur_sec);
+	if (vars->cur_usec)
+		free(vars->cur_usec);
+	if (vars->timestamp)
+		free(vars->timestamp);
+	if (vars->eaten_count)
+		free(vars->eaten_count);
+}
 
 void	cleanup(t_vars *vars, size_t optional)
 {
@@ -35,4 +47,5 @@ void	cleanup(t_vars *vars, size_t optional)
 		free(vars->philos);
 		vars->philos = NULL;
 	}
+	cleanup_two(vars);
 }
