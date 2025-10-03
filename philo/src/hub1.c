@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/03 18:36:34 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 21:43:46 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 			print_args(vars, 'f', philo_num);
 		if (eating(vars, philo_num))
 			break ;
-		if (vars->eaten_count[philo_num] == vars->turns)
+		if (vars->eaten_count[philo_num] >= vars->turns && usleep(1))
 			break ;
 		if (sleeping(vars, philo_num))
 			break ;
@@ -106,7 +106,7 @@ int	pre_hub(t_vars *vars)
 		if (pthread_create(&vars->philos[i], NULL,
 				portal, &(t_bypass){vars, i}))
 			return (cleanup(vars, i), 1);
-		usleep(1000);
+		usleep(600);
 		++i;
 	}
 	while (j <= vars->philo_num)
