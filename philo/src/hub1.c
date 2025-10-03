@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/02 23:39:48 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 02:20:43 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,21 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 	while (!vars->err && (vars->turns == 0
 			|| vars->eaten_count[philo_num] < vars->turns))
 	{
-		// if (philo_num % 2 == 1)
-		// {
-			pthread_mutex_lock(&vars->forks[left]);
-			print_args(vars, 'f', philo_num);
-			pthread_mutex_lock(&vars->forks[right]);
-			print_args(vars, 'f', philo_num);
-		// }
-		// else
-		// {
-		// 	pthread_mutex_lock(&vars->forks[right]);
-		// 	print_args(vars, 'f', philo_num);
-		// 	pthread_mutex_lock(&vars->forks[left]);
-		// 	print_args(vars, 'f', philo_num);
-		// }
-		if (eating(vars, philo_num) || sleeping(vars, philo_num)
-			|| thinking(vars, philo_num))
+		pthread_mutex_lock(&vars->forks[left]);
+		if (vars->err)
+			break ;
+		print_args(vars, 'f', philo_num);
+		if (vars->err)
+			break ;
+		pthread_mutex_lock(&vars->forks[right]);
+		if (vars->err)
+			break ;
+		print_args(vars, 'f', philo_num);
+		if (eating(vars, philo_num))
+			break ;
+		if (sleeping(vars, philo_num))
+			break ;
+		if (thinking(vars, philo_num))
 			break ;
 	}
 }
@@ -66,13 +65,40 @@ void	*portal(void *bypass)
 	return (0);
 }
 
+void	*monitoring(void *vars)
+{
+	t_vars			*var;
+	size_t			i;
+	struct timeval	tv;
+	size_t			cur_time;
+
+	var = (t_vars *)vars;
+	while (!var->finished)
+	{
+		i = 1;
+		while (i <= var->philo_num)
+		{
+			cur_time = (gettimeofday(&tv, NULL) * 0)
+		+ conv_time(tv.tv_sec, tv.tv_usec, var->start_sec, var->start_usec);
+			if (var->timestamp[i] && cur_time - var->timestamp[i] > var->time_to_die * 1000)
+				return (dying(var, i), var->finished = 1, (void *)0);
+			++i;
+		}
+		usleep(1000);
+	}
+	return (0);
+}
+
 int	pre_hub(t_vars *vars)
 {
 	size_t		i;
 	size_t		j;
+	pthread_t	monitor;
 
 	i = 1;
 	j = 1;
+	vars->finished = 0;
+	pthread_create(&monitor, NULL, monitoring, (t_vars *){vars});
 	while (i <= vars->philo_num)
 	{
 		if (pthread_create(&vars->philos[i], NULL,
@@ -83,5 +109,7 @@ int	pre_hub(t_vars *vars)
 	}
 	while (j <= vars->philo_num)
 		pthread_join(vars->philos[j++], NULL);
+	vars->finished = 1;
+	pthread_join(monitor, NULL);
 	return (vars->err);
 }

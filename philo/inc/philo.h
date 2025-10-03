@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/02 23:50:19 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/03 01:39:54 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_vars
 	size_t			*cur_usec;
 	size_t			*timestamp;
 	size_t			*eaten_count;
+	size_t			finished;
 }	t_vars;
 
 typedef struct s_bypass
