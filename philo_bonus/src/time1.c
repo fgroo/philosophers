@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 18:26:01 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/05 20:45:58 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/06 22:10:06 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,27 @@
 #include <stddef.h>
 #include <sys/time.h>
 
-int	calc_time(t_vars *vars, size_t philo_num)
+int	calc_time(t_vars *vars)
 {
-	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
 	static int				firstrun = 0;
 
-	pthread_mutex_lock(&mutex);
 	if (gettimeofday(&vars->tv, NULL))
-		cleanup(vars, 0);
+		cleanup(vars);
 	if (!firstrun)
 	{
 		vars->start_sec = (size_t)vars->tv.tv_sec;
 		vars->start_usec = (size_t)vars->tv.tv_usec;
 		++firstrun;
 	}
-	vars->cur_sec[philo_num] = vars->tv.tv_sec - vars->start_sec;
-	vars->cur_usec[philo_num] = vars->tv.tv_usec - vars->start_usec;
+	vars->cur_sec = vars->tv.tv_sec - vars->start_sec;
+	vars->cur_usec = vars->tv.tv_usec - vars->start_usec;
 	if ((size_t)vars->tv.tv_usec < vars->start_usec)
 	{
-		vars->cur_sec[philo_num]--;
-		vars->cur_usec[philo_num] = vars->cur_usec[philo_num] + 1000000L;
+		vars->cur_sec--;
+		vars->cur_usec = vars->cur_usec + 1000000L;
 	}
-	vars->timestamp[philo_num] = vars->cur_sec[philo_num]
-		* 1000000L + vars->cur_usec[philo_num];
-	pthread_mutex_unlock(&mutex);
+	vars->timestamp = vars->cur_sec
+		* 1000000L + vars->cur_usec;
 	return (0);
 }
 

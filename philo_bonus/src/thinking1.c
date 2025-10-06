@@ -6,22 +6,16 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:34:46 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/05 20:45:54 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/06 22:00:27 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	thinking(t_vars *vars, size_t philo_num)
+int	thinking(t_vars *vars)
 {
-	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 	if (vars->err)
-		return (vars->err = 1);
-	pthread_mutex_lock(&print_mutex);
-	if (vars->err)
-		return (pthread_mutex_unlock(&print_mutex), vars->err = 1);
-	print_args(vars, 't', philo_num);
-	pthread_mutex_unlock(&print_mutex);
+		return (1);
+	print_args(vars, 't', vars->philo_num);
 	return (0);
 }

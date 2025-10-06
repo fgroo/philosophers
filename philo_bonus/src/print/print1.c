@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/05 20:45:19 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/06 23:13:08 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,9 @@ static int	writing(t_vars *vars, char type, size_t philo_num)
 
 void	print_args(t_vars *vars, char type, size_t philo_num)
 {
-	static pthread_mutex_t	writing_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-	pthread_mutex_lock(&writing_mutex);
+	sem_wait(&vars->print);
 	if ((type == 'f' || type == 'e' || type == 's'
 			|| type == 't' || type == 'd'))
 		writing(vars, type, philo_num);
-	pthread_mutex_unlock(&writing_mutex);
+	sem_post(&vars->print);
 }

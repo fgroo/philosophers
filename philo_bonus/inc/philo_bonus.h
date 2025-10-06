@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 17:29:16 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/06 23:03:32 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct s_vars
 	size_t			forks_init;
 	sem_t			butler;
 	size_t			butler_init;
+	sem_t			print;
+	size_t			print_init;
 	size_t			turns;
 	struct timeval	tv;
 	size_t			start_sec;
@@ -60,11 +62,11 @@ void	cleanup(t_vars *vars);
 int		creating(t_vars *vars);
 int		pre_hub(t_vars *vars);
 void	print_args(t_vars *vars, char type, size_t philo_num);
-int		eating(t_vars *vars, size_t philo_num);
-int		sleeping(t_vars *vars, size_t philo_num);
-int		thinking(t_vars *vars, size_t philo_num);
+int		eating(t_vars *vars);
+int		sleeping(t_vars *vars);
+int		thinking(t_vars *vars);
 void	dying(t_vars *vars, size_t philo_num);
-int		calc_time(t_vars *vars, size_t philo_num);
+int		calc_time(t_vars *vars);
 size_t	conv_time(long sec, long usec, size_t s_sec, size_t s_usec);
 
 #endif

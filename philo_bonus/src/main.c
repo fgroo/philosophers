@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 17:37:13 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/06 22:53:20 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	main(int ac, char *av[])
 	vars.err = 0;
 	vars.start_sec = 0;
 	vars.start_usec = 0;
+	vars.eaten_count = 0;
 	vars.finished_philo = 0;
 	if (!prep_convert_num(av, uturns_flag, &vars))
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 17:36:32 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/06 23:06:44 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,13 @@ static void	inner_hub(t_vars *vars)
 			print_args(vars, 'f', vars->philo_num);
 		if (eating(vars))
 			break ;
+		sem_post(&vars->butler);
 		if (vars->eaten_count == vars->turns && usleep(1))
 			break ;
 		if (sleeping(vars))
 			break ;
 		if (thinking(vars))
 			break ;
-		sem_post(&vars->forks);
-		sem_post(&vars->forks);
-		sem_post(&vars->butler);
 	}
 }
 
@@ -57,7 +55,6 @@ int	only_one_philo(t_vars *vars)
 void	*monitoring(void *vars)
 {
 	t_vars			*var;
-	size_t			i;
 	struct timeval	tv;
 	size_t			cur_time;
 
@@ -68,7 +65,7 @@ void	*monitoring(void *vars)
 				tv.tv_usec, var->start_sec, var->start_usec);
 		if (var->timestamp && cur_time - var->timestamp
 			> var->time_to_die * 1000)
-			return (dying(var, i), var->finished_monitor = 1, (void *)0);
+			return (dying(var, var->philo_num), var->finished_monitor = 1, (void *)0);
 		usleep(1000);
 	}
 	return (0);
@@ -78,15 +75,22 @@ static void	portal(t_vars *vars)
 	pthread_t	monitor;
 
 	pthread_create(&monitor, NULL, monitoring, (t_vars *){vars});
+	calc_time(vars);
 	inner_hub(vars);
 	vars->finished_monitor = 1;
 	pthread_join(monitor, NULL);
+	pthread_detach(monitor);
+	if (vars->err)
+		exit(1);
+	else
+	 	exit(0);
 }
 
 int	pre_hub(t_vars *vars)
 {
 	pid_t		pid;
 
+	pid = 0;
 	vars->finished_monitor = 0;
 	if (vars->philo_num == 1)
 		return (only_one_philo(vars));
