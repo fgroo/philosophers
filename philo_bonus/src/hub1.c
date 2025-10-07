@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 23:06:44 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/07 18:26:23 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ static void	inner_hub(t_vars *vars)
 	while (!vars->err && (vars->turns == 0
 			|| vars->eaten_count < vars->turns))
 	{
-		sem_wait(&vars->butler);
-		sem_wait(&vars->forks);
+		sem_wait(vars->butler);
+		sem_wait(vars->forks);
 		if (!vars->err)
 			print_args(vars, 'f', vars->philo_num);
-		sem_wait(&vars->forks);
+		sem_wait(vars->forks);
 		if (!vars->err)
 			print_args(vars, 'f', vars->philo_num);
 		if (eating(vars))
 			break ;
-		sem_post(&vars->butler);
+		sem_post(vars->butler);
 		if (vars->eaten_count == vars->turns && usleep(1))
 			break ;
 		if (sleeping(vars))
@@ -43,11 +43,11 @@ static void	inner_hub(t_vars *vars)
 
 int	only_one_philo(t_vars *vars)
 {
-	sem_wait(&vars->forks);
-	print_args(vars, 'f', 1); // how can i check which value sem fork has?
+	sem_wait(vars->forks);
+	print_args(vars, 'f', 1);
 	usleep(vars->time_to_die * 1000);
 	print_args(vars, 'd', 1);
-	sem_post(&vars->forks);
+	sem_post(vars->forks);
 	vars->err = 1;
 	return (1);
 }
@@ -74,8 +74,11 @@ static void	portal(t_vars *vars)
 {
 	pthread_t	monitor;
 
-	pthread_create(&monitor, NULL, monitoring, (t_vars *){vars});
 	calc_time(vars);
+	vars->forks = sem_open("/philo_forks", 0);
+	if (vars->forks == SEM_FAILED)
+		(free(0), cleanup(vars), exit(1));
+	pthread_create(&monitor, NULL, monitoring, (t_vars *){vars});
 	inner_hub(vars);
 	vars->finished_monitor = 1;
 	pthread_join(monitor, NULL);

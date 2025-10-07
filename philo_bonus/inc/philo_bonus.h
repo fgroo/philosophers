@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 23:03:32 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/07 17:32:28 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <semaphore.h>
+# include <fcntl.h>
 # include <signal.h>
 # include <sys/wait.h>
 
@@ -33,11 +34,11 @@ typedef struct s_vars
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	pid_t			*philos;
-	sem_t			forks;
+	sem_t			*forks;
 	size_t			forks_init;
-	sem_t			butler;
+	sem_t			*butler;
 	size_t			butler_init;
-	sem_t			print;
+	sem_t			*print;
 	size_t			print_init;
 	size_t			turns;
 	struct timeval	tv;

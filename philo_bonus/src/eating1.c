@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:17:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 22:12:48 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/07 17:41:37 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	eating(t_vars *vars)
 	usleep(vars->time_to_eat * 1000);
 	if (vars->err)
 		return (1);
-	sem_post(&vars->forks);
-	sem_post(&vars->forks);
+	sem_post(vars->forks);
+	sem_post(vars->forks);
 	calc_time(vars);
 	++vars->eaten_count;
 	if (vars->err)
