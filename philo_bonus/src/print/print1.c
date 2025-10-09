@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/07 17:42:36 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/08 14:32:36 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,7 @@ static int	writing(t_vars *vars, char type, size_t philo_num)
 
 void	print_args(t_vars *vars, char type, size_t philo_num)
 {
-	// int		val;
-	// char	*msg;
-
 	sem_wait(vars->print);
-	// val = 0;
-	// sem_getvalue(vars->print, &val);
-	// msg = lotoa((size_t)val);
-	// (size_t){0} = write(1, msg , ft_strlen(msg));
-	// (size_t){0} = write(1, "\n" ,1);
 	if ((type == 'f' || type == 'e' || type == 's'
 			|| type == 't' || type == 'd'))
 		writing(vars, type, philo_num);

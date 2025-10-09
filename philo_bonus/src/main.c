@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 22:53:20 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/08 18:04:39 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	main(int ac, char *av[])
 		return (1);
 	vars.total_philo = vars.philo_num;
 	if (creating(&vars))
-		return (cleanup(&vars), 1);
+		return (cleanup(&vars), sem_closing(vars), 1);
 	if (pre_hub(&vars))
 		return (cleanup(&vars), 1);
 	cleanup(&vars);

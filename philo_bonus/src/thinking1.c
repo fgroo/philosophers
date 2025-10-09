@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:34:46 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/06 22:00:27 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/08 14:26:21 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	thinking(t_vars *vars)
 {
 	if (vars->err)
-		return (1);
+		return (vars->finished_monitor = 1);
 	print_args(vars, 't', vars->philo_num);
 	return (0);
 }

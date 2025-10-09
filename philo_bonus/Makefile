@@ -13,7 +13,7 @@ CFLAGS += -Wextra
 CFLAGS += -Werror
 CFLAGS += -Wpedantic
 CFLAGS += -pthread
-CFLAGS += -O2
+CFLAGS += -O3
 CFLAGS += -D_FORTIFY_SOURCE=2
 CFLAGS += -I$(INC_DIR)
 

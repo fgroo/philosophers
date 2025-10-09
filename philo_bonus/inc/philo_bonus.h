@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/07 17:32:28 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/08 18:02:21 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 typedef struct s_vars
 {
-	size_t			err;
+	int				err;
 	size_t			philo_num;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -60,6 +60,8 @@ typedef struct s_bypass
 }	t_bypass;
 
 void	cleanup(t_vars *vars);
+void	killer(t_vars *vars);
+void	sem_closing(t_vars vars);
 int		creating(t_vars *vars);
 int		pre_hub(t_vars *vars);
 void	print_args(t_vars *vars, char type, size_t philo_num);
