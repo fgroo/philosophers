@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 19:59:52 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/09 14:06:12 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/09 23:12:17 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 
 static int	create_forks_butler_print(t_vars *vars)
 {
-	sem_unlink("/philo_forks");
-	sem_unlink("/philo_butler");
-	sem_unlink("/philo_print");
 	vars->forks = sem_open("/philo_forks", O_CREAT | O_EXCL, 0644,
 			vars->philo_num);
 	if (vars->forks == SEM_FAILED)
@@ -38,6 +35,11 @@ static int	create_forks_butler_print(t_vars *vars)
 		return (1);
 	else
 		vars->print_init = 1;
+	vars->stop = sem_open("/philo_stop", O_CREAT | O_EXCL, 0644, 0);
+	if (vars->stop == SEM_FAILED)
+		return (1);
+	else
+		vars->stop_init = 1;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:17:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/03 23:55:39 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/09 22:10:45 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	eating(t_vars *vars, size_t philo_num)
 		return (pthread_mutex_unlock(&vars->forks[left]),
 			pthread_mutex_unlock(&vars->forks[right]), 1);
 	print_args(vars, 'e', philo_num);
-	usleep(vars->time_to_eat * 1000);
+	if (napping(vars, vars->time_to_eat))
+		return (pthread_mutex_unlock(&vars->forks[left]),
+			pthread_mutex_unlock(&vars->forks[right]), 1);
 	calc_time(vars, philo_num);
 	pthread_mutex_unlock(&vars->forks[left]);
 	pthread_mutex_unlock(&vars->forks[right]);

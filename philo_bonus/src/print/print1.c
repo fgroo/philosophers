@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:09:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/08 14:32:36 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/09 23:24:45 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ static int	writing(t_vars *vars, char type, size_t philo_num)
 void	print_args(t_vars *vars, char type, size_t philo_num)
 {
 	sem_wait(vars->print);
+	if (check_situation() && type != 'd')
+	{
+		sem_post(vars->print);
+		return ;
+	}
 	if ((type == 'f' || type == 'e' || type == 's'
 			|| type == 't' || type == 'd'))
 		writing(vars, type, philo_num);

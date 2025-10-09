@@ -6,13 +6,41 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/08 18:04:39 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/10 00:17:15 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <limits.h>
 #include <stddef.h>
 #include <sys/time.h>
+#include <unistd.h>
+
+int	napping(size_t time)
+{
+	struct timeval	start;
+	struct timeval	now;
+	size_t			total_ms;
+	size_t			elapsed_ms;
+	useconds_t		interval_us;
+
+	total_ms = time;
+	elapsed_ms = 0UL;
+	interval_us = 100;
+	gettimeofday(&start, NULL);
+	while (elapsed_ms < total_ms)
+	{
+		if (check_situation())
+			return (1);
+		usleep(interval_us);
+		gettimeofday(&now, NULL);
+		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000UL
+			+ (now.tv_usec - start.tv_usec) / 1000UL;
+	}
+	if (check_situation())
+		return (1);
+	return (0);
+}
 
 long	ft_atol(const char *str)
 {
@@ -91,7 +119,6 @@ int	main(int ac, char *av[])
 	if (creating(&vars))
 		return (cleanup(&vars), sem_closing(vars), 1);
 	if (pre_hub(&vars))
-		return (cleanup(&vars), 1);
-	cleanup(&vars);
-	return (0);
+		return (cleanup(&vars), sem_closing(vars), 1);
+	return (cleanup(&vars), sem_closing(vars), 0);
 }

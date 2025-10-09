@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/09 14:24:08 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/10 00:01:35 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ static void	inner_hub(t_vars *vars)
 	{
 		sem_wait(vars->butler);
 		sem_wait(vars->forks);
-		if (!vars->err)
+		if (!check_situation())
 			print_args(vars, 'f', vars->philo_num);
 		sem_wait(vars->forks);
-		if (!vars->err)
+		if (!check_situation())
 			print_args(vars, 'f', vars->philo_num);
 		if (eating(vars))
 			break ;
-		if (vars->eaten_count == vars->turns && usleep(1))
+		if (vars->eaten_count == vars->turns)
 			break ;
 		if (sleeping(vars))
 			break ;
@@ -72,8 +72,7 @@ void	*monitoring(void *vars)
 	size_t			cur_time;
 
 	var = (t_vars *)vars;
-	var->finished_monitor = 0;
-	while (!var->finished_monitor)
+	while (1)
 	{
 		cur_time = (gettimeofday(&tv, NULL) * 0) + conv_time(tv.tv_sec,
 				tv.tv_usec, var->start_sec, var->start_usec);
@@ -93,15 +92,18 @@ static void	portal(t_vars *vars)
 	vars->forks = sem_open("/philo_forks", 0);
 	vars->butler = sem_open("/philo_butler", 0);
 	vars->print = sem_open("/philo_print", 0);
+	vars->stop = sem_open("/philo_stop", 0);
 	if (vars->forks == SEM_FAILED || vars->butler == SEM_FAILED
-		|| vars->print == SEM_FAILED)
+		|| vars->print == SEM_FAILED || vars->stop == SEM_FAILED)
 		(free(0), cleanup(vars), exit(1));
 	if (pthread_create(&monitor, NULL, monitoring, (t_vars *){vars})
 		&& ++vars->err && (exit(1), 1))
 		return ;
 	inner_hub(vars);
-	vars->finished_monitor = 1;
-	pthread_join(monitor, NULL);
+	sem_unlink("/philo_forks");
+	sem_unlink("/philo_butler");
+	sem_unlink("/philo_print");
+	pthread_detach(monitor);
 	if (vars->err)
 		exit(1);
 	else

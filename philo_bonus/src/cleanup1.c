@@ -6,22 +6,19 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 21:45:55 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/09 14:14:26 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/10 00:16:25 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 #include <semaphore.h>
+#include <signal.h>
 #include <stddef.h>
+#include <errno.h>
+#include <unistd.h>
 
 void	cleanup(t_vars *vars)
 {
-	if (vars->forks_init && vars->print != SEM_FAILED)
-		sem_close(vars->forks);
-	if (vars->butler_init && vars->print != SEM_FAILED)
-		sem_close(vars->butler);
-	if (vars->print_init && vars->print != SEM_FAILED)
-		sem_close(vars->print);
 	if (vars->philos)
 		(free(vars->philos), vars->philos = NULL);
 }
@@ -41,4 +38,25 @@ void	sem_closing(t_vars vars)
 	sem_close(vars.forks);
 	sem_close(vars.butler);
 	sem_close(vars.print);
+	sem_close(vars.stop);
+	sem_unlink("/philo_forks");
+	sem_unlink("/philo_butler");
+	sem_unlink("/philo_print");
+	sem_unlink("/philo_stop");
+}
+
+int	check_situation(void)
+{
+	sem_t	*temp_stop;
+
+	temp_stop = sem_open("/philo_stop", 0);
+	if (temp_stop == SEM_FAILED)
+	{
+		if (errno == ENOENT)
+			return (1);
+		else
+			return (1);
+	}
+	sem_close(temp_stop);
+	return (0);
 }
