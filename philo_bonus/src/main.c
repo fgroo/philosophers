@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/10 00:17:15 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/10 10:12:14 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int	napping(size_t time)
 	while (elapsed_ms < total_ms)
 	{
 		if (check_situation())
-			return (1);
+			return (usleep(100), 1);
 		usleep(interval_us);
 		gettimeofday(&now, NULL);
 		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000UL
 			+ (now.tv_usec - start.tv_usec) / 1000UL;
 	}
 	if (check_situation())
-		return (1);
+		return (usleep(100), 1);
 	return (0);
 }
 

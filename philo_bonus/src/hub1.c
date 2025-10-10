@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/10 00:01:35 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/10 10:15:53 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static void	portal(t_vars *vars)
 {
 	pthread_t	monitor;
 
+	usleep(2000);
 	calc_time(vars);
 	vars->forks = sem_open("/philo_forks", 0);
 	vars->butler = sem_open("/philo_butler", 0);
