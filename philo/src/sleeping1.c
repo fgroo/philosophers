@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 07:14:55 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/09 22:10:36 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/11 17:40:40 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	sleeping(t_vars *vars, size_t philo_num)
 		return (pthread_mutex_unlock(&print_mutex), vars->err = 1);
 	print_args(vars, 's', philo_num);
 	pthread_mutex_unlock(&print_mutex);
-	if (napping(vars, vars->time_to_sleep))
+	if (napping(vars, vars->time_to_sleep, 10))
 		return (pthread_mutex_unlock(&print_mutex), vars->err = 1);
 	if (vars->err)
 		return (vars->err = 1);

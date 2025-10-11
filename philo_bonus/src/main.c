@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/10 10:12:14 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/11 13:35:12 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,30 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-int	napping(size_t time)
+int	napping(size_t total_ms, useconds_t interval_us)
 {
-	struct timeval	start;
-	struct timeval	now;
-	size_t			total_ms;
-	size_t			elapsed_ms;
-	useconds_t		interval_us;
+	struct timeval		start;
+	struct timeval		now;
+	size_t				elapsed_ms;
+	long				sec_diff;
+	long				usec_diff;
 
-	total_ms = time;
 	elapsed_ms = 0UL;
-	interval_us = 100;
 	gettimeofday(&start, NULL);
 	while (elapsed_ms < total_ms)
 	{
 		if (check_situation())
-			return (usleep(100), 1);
+			return (exit(1), 1);
 		usleep(interval_us);
 		gettimeofday(&now, NULL);
-		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000UL
-			+ (now.tv_usec - start.tv_usec) / 1000UL;
+		sec_diff = now.tv_sec - start.tv_sec;
+		usec_diff = now.tv_usec - start.tv_usec;
+		if (usec_diff < 0)
+			(free(0), --sec_diff, usec_diff += 1000000);
+		elapsed_ms = sec_diff * 1000UL + usec_diff / 1000UL;
 	}
 	if (check_situation())
-		return (usleep(100), 1);
+		return (exit(1), 1);
 	return (0);
 }
 

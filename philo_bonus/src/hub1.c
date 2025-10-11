@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/10 10:15:53 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/11 21:14:09 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static void	inner_hub(t_vars *vars)
 		sem_wait(vars->forks);
 		if (!check_situation())
 			print_args(vars, 'f', vars->philo_num);
+		if (check_situation())
+			break ;
 		if (eating(vars))
 			break ;
 		if (vars->eaten_count == vars->turns)
@@ -79,7 +81,10 @@ void	*monitoring(void *vars)
 		if (var->timestamp && cur_time - var->timestamp
 			> var->time_to_die * 1000)
 			return (dying(var, var->philo_num), (void *)0);
-		usleep(1000);
+		if (var->total_philo > 100)
+			usleep(100);
+		else
+			usleep(1000);
 	}
 	return (0);
 }
@@ -88,15 +93,7 @@ static void	portal(t_vars *vars)
 {
 	pthread_t	monitor;
 
-	usleep(2000);
 	calc_time(vars);
-	vars->forks = sem_open("/philo_forks", 0);
-	vars->butler = sem_open("/philo_butler", 0);
-	vars->print = sem_open("/philo_print", 0);
-	vars->stop = sem_open("/philo_stop", 0);
-	if (vars->forks == SEM_FAILED || vars->butler == SEM_FAILED
-		|| vars->print == SEM_FAILED || vars->stop == SEM_FAILED)
-		(free(0), cleanup(vars), exit(1));
 	if (pthread_create(&monitor, NULL, monitoring, (t_vars *){vars})
 		&& ++vars->err && (exit(1), 1))
 		return ;

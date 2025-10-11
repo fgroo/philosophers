@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:47:36 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/09 22:37:52 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/11 17:40:12 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_bypass
 	size_t	philo_num;
 }	t_bypass;
 
-int		napping(t_vars *vars, size_t time);
+int		napping(t_vars *vars, size_t total_ms, useconds_t interval_us);
 void	cleanup(t_vars *vars, size_t optional);
 int		creating(t_vars *vars);
 int		pre_hub(t_vars *vars);

@@ -41,7 +41,6 @@ ifeq ($(ASAN), 1)
 	LDFLAGS += -fsanitize=address
 endif
 
-
 ### .o ###
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
@@ -55,6 +54,7 @@ vpath %.h $(INC_DIR)
 INC += philo_bonus.h
 
 ### .c ###
+
 SRC :=
 
 vpath %.c $(SRC_DIR)
@@ -71,13 +71,12 @@ SRC += time1.c
 vpath %.c $(PRINT_DIR)
 SRC += print1.c
 
-
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c $(INC) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
@@ -90,4 +89,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: $(NAME) clean fclean re all
+.PHONY: clean fclean re all

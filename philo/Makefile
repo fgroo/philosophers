@@ -55,6 +55,7 @@ vpath %.h $(INC_DIR)
 INC += philo.h
 
 ### .c ###
+
 SRC :=
 
 vpath %.c $(SRC_DIR)
@@ -70,7 +71,6 @@ SRC += time1.c
 
 vpath %.c $(PRINT_DIR)
 SRC += print1.c
-
 
 all: $(NAME)
 
@@ -90,4 +90,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: $(NAME) clean fclean re all
+.PHONY: clean fclean re all

@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/04 01:04:47 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/11 21:01:52 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 			print_args(vars, 'f', philo_num);
 		if (eating(vars, philo_num))
 			break ;
-		if (vars->eaten_count[philo_num] == vars->turns && usleep(1))
+		if (vars->eaten_count[philo_num] == vars->turns)
 			break ;
 		if (sleeping(vars, philo_num))
 			break ;
@@ -76,14 +76,18 @@ void	*monitoring(void *vars)
 		i = 1;
 		while (i <= var->philo_num)
 		{
-			cur_time = (gettimeofday(&tv, NULL) * 0) + conv_time(tv.tv_sec,
+			gettimeofday(&tv, NULL);
+			cur_time = conv_time(tv.tv_sec,
 					tv.tv_usec, var->start_sec, var->start_usec);
 			if (var->timestamp[i] && cur_time - var->timestamp[i]
 				> var->time_to_die * 1000)
 				return (dying(var, i), var->finished = 1, (void *)0);
 			++i;
 		}
-		usleep(1000);
+		if (var->philo_num > 100)
+			usleep(100);
+		else
+			usleep(1000);
 	}
 	return (0);
 }
@@ -103,12 +107,12 @@ int	pre_hub(t_vars *vars)
 		if (pthread_create(&vars->philos[i], NULL,
 				portal, &(t_bypass){vars, i}))
 			return (cleanup(vars, i), 1);
-		usleep(543);
+		usleep(20);
 		++i;
 	}
 	while (j <= vars->philo_num)
 		pthread_join(vars->philos[j++], NULL);
 	vars->finished = 1;
-	pthread_join(monitor, NULL);
+	pthread_detach(monitor);
 	return (vars->err);
 }

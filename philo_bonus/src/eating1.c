@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:17:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/10 10:13:02 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/11 14:08:24 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,18 @@
 int	eating(t_vars *vars)
 {
 	if (check_situation())
-		return (usleep(100), 1);
-	print_args(vars, 'e', vars->philo_num);
-	napping(vars->time_to_eat);
+		return (exit(1), 1);
 	calc_time(vars);
+	print_args(vars, 'e', vars->philo_num);
+	if (napping(vars->time_to_eat, 10))
+		return (exit(1), 1);
 	sem_post(vars->forks);
 	sem_post(vars->forks);
 	sem_post(vars->butler);
 	if (check_situation())
-		return (usleep(100), 1);
+		return (exit(1), 1);
 	++vars->eaten_count;
 	if (check_situation())
-		return (usleep(100), 1);
+		return (exit(1), 1);
 	return (0);
 }
