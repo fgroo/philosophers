@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/11 21:01:52 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/22 23:45:04 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,14 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 			|| vars->eaten_count[philo_num] < vars->turns))
 	{
 		pthread_mutex_lock(&vars->forks[left]);
-		if (!vars->err)
-			print_args(vars, 'f', philo_num);
+		if (vars->err && (pthread_mutex_unlock(&vars->forks[left]), 1))
+			return ;
+		print_args(vars, 'f', philo_num);
 		pthread_mutex_lock(&vars->forks[right]);
-		if (!vars->err)
-			print_args(vars, 'f', philo_num);
+		if (vars->err && (pthread_mutex_unlock(&vars->forks[left]), 1)
+			&& (pthread_mutex_unlock(&vars->forks[right]), 1))
+			return ;
+		print_args(vars, 'f', philo_num);
 		if (eating(vars, philo_num))
 			break ;
 		if (vars->eaten_count[philo_num] == vars->turns)
@@ -38,6 +41,7 @@ static void	inner_hub(t_vars *vars, size_t philo_num)
 			break ;
 		if (thinking(vars, philo_num))
 			break ;
+		usleep(2442);
 	}
 }
 
@@ -69,8 +73,9 @@ void	*monitoring(void *vars)
 	size_t			i;
 	struct timeval	tv;
 	size_t			cur_time;
+	size_t			timestamp;
 
-	var = (t_vars *)vars;
+	(free(0), var = (t_vars *)vars, usleep(var->time_to_die * 942));
 	while (!var->finished)
 	{
 		i = 1;
@@ -79,15 +84,14 @@ void	*monitoring(void *vars)
 			gettimeofday(&tv, NULL);
 			cur_time = conv_time(tv.tv_sec,
 					tv.tv_usec, var->start_sec, var->start_usec);
-			if (var->timestamp[i] && cur_time - var->timestamp[i]
-				> var->time_to_die * 1000)
+			pthread_mutex_lock(&var->timestamp_mutexes[i]);
+			timestamp = var->timestamp[i];
+			pthread_mutex_unlock(&var->timestamp_mutexes[i]);
+			if (timestamp && cur_time - timestamp > var->time_to_die * 1000)
 				return (dying(var, i), var->finished = 1, (void *)0);
+			usleep(442);
 			++i;
 		}
-		if (var->philo_num > 100)
-			usleep(100);
-		else
-			usleep(1000);
 	}
 	return (0);
 }
@@ -107,7 +111,7 @@ int	pre_hub(t_vars *vars)
 		if (pthread_create(&vars->philos[i], NULL,
 				portal, &(t_bypass){vars, i}))
 			return (cleanup(vars, i), 1);
-		usleep(20);
+		usleep(442);
 		++i;
 	}
 	while (j <= vars->philo_num)

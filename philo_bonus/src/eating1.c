@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 06:17:49 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/11 14:08:24 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/22 22:31:27 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	eating(t_vars *vars)
 		return (exit(1), 1);
 	calc_time(vars);
 	print_args(vars, 'e', vars->philo_num);
-	if (napping(vars->time_to_eat, 10))
+	if (napping(vars->time_to_eat))
 		return (exit(1), 1);
 	sem_post(vars->forks);
 	sem_post(vars->forks);

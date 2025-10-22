@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 21:45:55 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/10 23:35:46 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/22 23:01:47 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 
 static void	cleanup_two(t_vars *vars)
 {
+	size_t	i;
+
+	if (vars->timestamp_mutexes)
+	{
+		i = 0;
+		while (i <= vars->philo_num)
+			pthread_mutex_destroy(&vars->timestamp_mutexes[i++]);
+		free(vars->timestamp_mutexes);
+		vars->timestamp_mutexes = NULL;
+	}
 	if (vars->cur_sec)
 		free(vars->cur_sec);
 	if (vars->cur_usec)

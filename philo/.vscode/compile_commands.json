@@ -1,7 +1,0 @@
-[
-    {
-        "directory": "/home/admin/coding/projects/philosophers/philo",
-        "command": "cc -Iinc -Wall -Wextra -Werror -Wpedantic -pthread -D_FORTIFY_SOURCE=2 -O2 -c src/main.c -o obj/main.o",
-        "file": "/home/admin/coding/projects/philosophers/philo/src/main.c"
-    }
-]

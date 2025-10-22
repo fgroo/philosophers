@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 18:26:01 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/11 21:02:20 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/22 23:01:47 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ int	calc_time(t_vars *vars, size_t philo_num)
 		vars->cur_sec[philo_num]--;
 		vars->cur_usec[philo_num] = vars->cur_usec[philo_num] + 1000000L;
 	}
+	pthread_mutex_unlock(&mutex);
+	pthread_mutex_lock(&vars->timestamp_mutexes[philo_num]);
 	vars->timestamp[philo_num] = vars->cur_sec[philo_num]
 		* 1000000L + vars->cur_usec[philo_num];
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&vars->timestamp_mutexes[philo_num]);
 	return (0);
 }
 
