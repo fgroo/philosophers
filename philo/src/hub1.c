@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/22 23:45:04 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/23 11:09:18 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	*monitoring(void *vars)
 	size_t			timestamp;
 
 	(free(0), var = (t_vars *)vars, usleep(var->time_to_die * 942));
-	while (!var->finished)
+	while (!var->finished && var->philo_num != 1)
 	{
 		i = 1;
 		while (i <= var->philo_num)
@@ -117,6 +117,6 @@ int	pre_hub(t_vars *vars)
 	while (j <= vars->philo_num)
 		pthread_join(vars->philos[j++], NULL);
 	vars->finished = 1;
-	pthread_detach(monitor);
+	pthread_join(monitor, NULL);
 	return (vars->err);
 }

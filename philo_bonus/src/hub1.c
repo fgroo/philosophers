@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 08:22:10 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/22 22:32:11 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/23 11:50:30 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,7 @@ void	*monitoring(void *vars)
 		if (var->timestamp && cur_time - var->timestamp
 			> var->time_to_die * 1000)
 			return (dying(var, var->philo_num), (void *)0);
-		if (var->total_philo > 100)
-			usleep(100);
-		else
-			usleep(1000);
+		usleep(1042);
 	}
 	return (0);
 }
@@ -115,7 +112,7 @@ int	pre_hub(t_vars *vars)
 	pid = 0;
 	if (vars->philo_num == 1)
 		return (only_one_philo(vars), waitpid(-1, NULL, 0), vars->err);
-	while (vars->philo_num)
+	while (vars->philo_num && (usleep(442), 1))
 	{
 		pid = fork();
 		if (pid == -1)
