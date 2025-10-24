@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:41:05 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/23 12:06:07 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:54:00 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,26 @@ int	prep_convert_num(char **args, int uturns_flag, t_vars *vars)
 	return (1);
 }
 
+int	validate_input(char **av)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (av[i])
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (!(av[i][j] >= '0' && av[i][j] <= '9'))
+				return (1);
+			++j;
+		}
+		++i;
+	}
+	return (0);
+}
+
 int	main(int ac, char *av[])
 {
 	int		uturns_flag;
@@ -108,6 +128,8 @@ int	main(int ac, char *av[])
 	else
 		uturns_flag = 1;
 	vars = (t_vars){0};
+	if (validate_input(av + 1))
+		return ((size_t){0} = write(2, "error: invalid arguments\n", 25), 0);
 	if (!prep_convert_num(av, uturns_flag, &vars))
 		return (1);
 	vars.total_philo = vars.philo_num;

@@ -6,7 +6,7 @@
 /*   By: fgroo <student@42.eu>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 19:59:52 by fgroo             #+#    #+#             */
-/*   Updated: 2025/10/22 23:50:15 by fgroo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:46:18 by fgroo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	create_others(t_vars *vars)
 	vars->timestamp = malloc(sizeof(size_t) * (vars->philo_num + 1));
 	if (!vars->eaten_count || !vars->cur_sec
 		|| !vars->cur_usec || !vars->timestamp)
-		return (cleanup(vars, 0), 1);
+		return (1);
 	while (i <= vars->philo_num)
 	{
 		vars->eaten_count[i] = 0;
